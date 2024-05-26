@@ -77,7 +77,7 @@ jobs:
       - name: Run tests
         run: go test -race -coverpkg=./... -vet=off -covermode=atomic -coverprofile=raw_coverage.out ./...
       - name: Remove generated files
-        run: cat cover | fgrep -v "pb.go"  > coverage.out
+        run: cat raw_coverage.out | fgrep -v "pb.go"  > coverage.out
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         env:
@@ -87,21 +87,18 @@ jobs:
         run: echo "allure-reports=$(find . -depth -name 'allure-results' -type d | xargs)" >> "$GITHUB_OUTPUT"
       - name: Load test report history
         uses: actions/checkout@v3
-        if: always()
         continue-on-error: true
         with:
           ref: gh-pages
           path: gh-pages
       - name: Build test report
         uses: simple-elf/allure-report-action@v1.7
-        if: always()
         with:
           gh_pages: gh-pages
           allure_history: allure-history
           allure_results: ${{ steps.allure-report.outputs.allure-reports }}
       - name: Publish test report
         uses: peaceiris/actions-gh-pages@v3
-        if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
