@@ -1,4 +1,4 @@
-LOG_DIR=./logs
+LOG_DIR=./app-log
 SWAG_DIRS=./internal/app/delivery/http/v1/,./internal/shortcut/delivery/http/v1/handlers,./internal/shortcut/delivery/http/v1/models/response,./internal/shortcut/delivery/http/v1/models/request,./internal/shortcut/delivery/http/tools
 
 # Генерация
@@ -65,6 +65,13 @@ run-coverage:
 
 # Дополнительно
 
+.PHONY: run-hash-test
+run-hash-test:
+	go run ./hash_test
+
+.PHONY: open-last-log
+open-last-log:
+
 .PHONY: open-last-log
 open-last-log:
 	cat $(LOG_DIR)/`ls -t $(LOG_DIR) | head -1 `
@@ -76,8 +83,6 @@ clear-logs:
 .PHONY: mocks
 mocks:
 	go generate -n $$(go list ./internal/...)
-
-
 
 .PHONY: fmt
 fmt:

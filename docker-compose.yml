@@ -2,20 +2,20 @@ version: "3"
 volumes:
   postgres-data:
 services:
-#  smallurl:
-#    image: smallurl
-#    networks:
-#      - default
-#    volumes:
-#      - ./app-log:/app/app-log
-#      - ./config/docker-config.yaml:/config.yaml
-#    ports:
-#      - "8080:8080"
-#    environment:
-#      - CONFIG_PATH=/config.yaml
-#    depends_on:
-#      - url-bd
-#    restart: on-failure
+  smallurl:
+    image: smallurl
+    networks:
+      - default
+    volumes:
+      - ./app-log:/app/app-log
+      - ./config/docker-config.yaml:/config.yaml
+    ports:
+      - "8080:8080"
+    environment:
+      - CONFIG_PATH=/config.yaml
+    depends_on:
+      - url-bd
+    restart: on-failure
   url-bd:
     image: postgres:16
     expose:
