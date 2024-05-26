@@ -1,0 +1,90 @@
+basePath: /api/v1
+definitions:
+  request.LongURL:
+    properties:
+      original_url:
+        description: Оригинальный URL, который необходимо сократить
+        example: http://example.com
+        type: string
+    type: object
+  response.Result:
+    properties:
+      short_url:
+        description: Полученный сокращённый URL
+        example: a6sd4ca48A
+        type: string
+    type: object
+  tools.Error:
+    properties:
+      error:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: vet_v2002@mail.ru
+    name: Артём Ветошкин
+  description: Rest API для сокращения URL адресов.
+  title: shortcut
+  version: "1.0"
+paths:
+  /{short_url}:
+    get:
+      description: Принимает сокращённый URL и возвращает оригинальный.
+      parameters:
+      - description: Короткий URL
+        in: path
+        name: short_url
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "303":
+          description: Найден оригинальный URL, и запрос перенаправлен на него
+        "400":
+          description: Некорректные данные запроса
+          schema:
+            $ref: '#/definitions/tools.Error'
+        "404":
+          description: Оригинальный URL не найден
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/tools.Error'
+      summary: Получение оригинального URL.
+      tags:
+      - urls
+  /shorten:
+    post:
+      consumes:
+      - application/json
+      description: Сохраняет оригинальный URL в базе и возвращает сокращённый.
+      parameters:
+      - description: Значение оригинального URL
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.LongURL'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Оригинальный URL успешно добавлен в систему
+          schema:
+            $ref: '#/definitions/response.Result'
+        "400":
+          description: Некорректные данные запроса
+          schema:
+            $ref: '#/definitions/tools.Error'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/tools.Error'
+      summary: Сокращение оригинального URL.
+      tags:
+      - urls
+schemes:
+- http
+swagger: "2.0"

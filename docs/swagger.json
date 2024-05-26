@@ -1,0 +1,136 @@
+{
+    "schemes": [
+        "http"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Rest API для сокращения URL адресов.",
+        "title": "shortcut",
+        "contact": {
+            "name": "Артём Ветошкин",
+            "email": "vet_v2002@mail.ru"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {
+        "/shorten": {
+            "post": {
+                "description": "Сохраняет оригинальный URL в базе и возвращает сокращённый.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "urls"
+                ],
+                "summary": "Сокращение оригинального URL.",
+                "parameters": [
+                    {
+                        "description": "Значение оригинального URL",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.LongURL"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Оригинальный URL успешно добавлен в систему",
+                        "schema": {
+                            "$ref": "#/definitions/response.Result"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные данные запроса",
+                        "schema": {
+                            "$ref": "#/definitions/tools.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/tools.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/{short_url}": {
+            "get": {
+                "description": "Принимает сокращённый URL и возвращает оригинальный.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "urls"
+                ],
+                "summary": "Получение оригинального URL.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Короткий URL",
+                        "name": "short_url",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "303": {
+                        "description": "Найден оригинальный URL, и запрос перенаправлен на него"
+                    },
+                    "400": {
+                        "description": "Некорректные данные запроса",
+                        "schema": {
+                            "$ref": "#/definitions/tools.Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Оригинальный URL не найден"
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/tools.Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "request.LongURL": {
+            "type": "object",
+            "properties": {
+                "original_url": {
+                    "description": "Оригинальный URL, который необходимо сократить",
+                    "type": "string",
+                    "example": "http://example.com"
+                }
+            }
+        },
+        "response.Result": {
+            "type": "object",
+            "properties": {
+                "short_url": {
+                    "description": "Полученный сокращённый URL",
+                    "type": "string",
+                    "example": "a6sd4ca48A"
+                }
+            }
+        },
+        "tools.Error": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
