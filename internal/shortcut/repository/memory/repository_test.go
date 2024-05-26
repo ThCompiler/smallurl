@@ -8,10 +8,7 @@ import (
 
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
-	"github.com/pkg/errors"
 )
-
-var testError = errors.New("test error")
 
 type MemoryRepositorySuite struct {
 	suite.Suite
